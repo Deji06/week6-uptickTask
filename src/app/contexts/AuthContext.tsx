@@ -170,3 +170,47 @@ export const  useAuthContextHook = () => {
     return context;
 }
 
+// "use client";
+
+// import React, { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+
+// interface authContextType {
+//     userName: string | null;
+//     setUserName: (username: string | null) => void;
+//     logOut: () => void;
+// }
+
+// export const AuthContext = createContext<authContextType | undefined>(undefined);
+
+// export const AuthProvider = ({ children }: { children: ReactNode }) => {
+//     const [userName, setUserName] = useState<string | null>(null);
+
+//     useEffect(() => {
+//       const savedUsername = localStorage.getItem("username");
+//       if (savedUsername) {
+//         setUserName(savedUsername);
+//       }
+//     }, []);
+
+//     const logOut = () => {
+//         localStorage.removeItem("authToken");
+//         localStorage.removeItem("regToken");
+//         localStorage.removeItem("username");
+//         setUserName('');
+//         console.log("all authentications and user info cleared");
+//     };
+
+//     return (
+//         <AuthContext.Provider value={{ userName, setUserName, logOut }}>
+//             {children}
+//         </AuthContext.Provider>
+//     );
+// };
+
+// export const useAuthContextHook = () => {
+//     const context = useContext(AuthContext);
+//     if (!context) {
+//         throw new Error('useAuthContextHook must be used within an AuthProvider');
+//     }
+//     return context;
+// };

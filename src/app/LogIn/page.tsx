@@ -60,30 +60,31 @@ const Login = () => {
   }
   return (
     <>
-      <div className="bg-[#E5EAED] h-screen  sm:py-5 py-20 px-3 md:px-10 ">
+      <div className="bg-[#E5EAED] min-h-screen flex items-center justify-center  sm:py-5 py-20 px-3 md:px-10 ">
         <div className="bg-white rounded-[10px]  md:w-[80%] m-auto shadow-lg h-fit ">
           <div
-            className="border-b flex justify-between p-3 animate-slide-in"
+            className="border-b flex items-center justify-between p-3 animate-slide-in"
             style={{ animationDelay: "0.1s" }}
           >
-            <p className="sm:ml-5 text-[20px] font-bold capitalize "> Todo app</p>
-            <div className="flex mr-5 items-center ">
-              <p className="text-red-900 ">Don't have an account?</p>
-              <Link href="/SignUp"  className="capitalize font-bold text-[14px]">
-                sign up
+            <p className="sm:ml-5 md:text-[20px] font-bold capitalize "> Todo app</p>
+            <div className="flex mr-5 items-center gap-x-2">
+              <p className="text-red-900 md:text-[16px]  text-[12px]">Don't have an account?</p>
+              <Link href="/SignUp"  className="font-bold text-[14px] underline">
+                signUp
               </Link>
             </div>
           </div>
-          <div className="flex h-full">
-            <Image
-              src={backGroundImage}
-              // width={20}
-              // height={10}
-              alt="background image for login page"
-              className=" border sm:w-[50%] bg-cover animate-fade-in w-[80%]"
-              style={{objectFit: 'cover'}}
-            />
-            <div className="w-[50%] px-5 m-7  pt-7">
+          <div className="flex  h-fit ">
+            <div className="relative sm:w-[50%] w-[80%]  animate-fade-in" style={{animationDelay: "0.2s"}}>
+              <Image
+                src={backGroundImage}
+                fill= {true}
+                alt="background image for login page"
+                className=" border w-[80%] sm:w-[50%] bg-cover animate-fade-in object-cover"
+              />
+            </div>
+
+            <div className="w-[60%] px-5 m-7 pt-7">
               <form
                 action=""
                 className="flex flex-col space-y-4 mt-5"

@@ -1,5 +1,4 @@
 "use client";
-
 import type React from "react";
 import Image from "next/image";
 import { useAuthContextHook } from "../contexts/AuthContext";
@@ -10,8 +9,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FaEye } from "react-icons/fa";
 import { IoMdEyeOff } from "react-icons/io";
-// import '@/app'
-// import ''
+// import '../../../styles/animations.css'
 
 const SignUp = () => {
   const router = useRouter();
@@ -89,36 +87,37 @@ const SignUp = () => {
   return (
     <>
       <div className="bg-[#E5EAED] min-h-screen  flex items-center justify-center sm:py-5 py-20 px-3 md:px-10 ">
-        <div className="bg-white rounded-[10px]  md:w-[80%] m-auto shadow-lg  h-fit max-w-[1200px]">
+        <div className="bg-white rounded-[10px]  md:w-[80%] m-auto shadow-lg  h-fit">
           <div
-            className="border-b flex justify-between p-3 animate-slide-in "
+            className="border-b flex justify-between p-3 items-center animate-slide-in "
             style={{ animationDelay: "0.1s" }}
           >
             <p className="sm:ml-5 sm:text-[20px] font-bold capitalize ">
               {" "}
               Todo app
             </p>
-            <div className="flex mr-5 items-center ">
+            <div className="flex mr-5 items-center gap-x-2">
               <p className="text-red-900 text-[12px] md:text-[16px] ">
                 already have an account ?
               </p>
-              <Link href="/LogIn" className="capitalize font-bold text-[14px]">
-                log in
+              <Link href="/LogIn" className="capitalize font-bold text-[14px] underline">
+                login
               </Link>
             </div>
           </div>
 
           <div className="flex h-fit">
-            <Image
-              src={backGroundImage}
-              alt="background image for signup page"
-              // width={500}
-              // height={10}
-              className="border animate-fade-in w-[80%] sm:w-[50%]"
-              style={{ objectFit: "cover" }}
-            />
+            <div className="relative sm:w-[50%] w-[80%] animate-fade-in" style={{animationDelay: "0.2s"}}>
+              <Image
+                src={backGroundImage}
+                alt="background image for signup page"
+                fill={true}
+                className="border animate-fade-in w-[80%] sm:w-[50%] object-cover"
+              />
 
-            <div className="sm:w-[50%] px-5 m-5  md:pt-5 ">
+            </div>
+
+            <div className="sm:w-[50%]  px-5 m-5  md:pt-5">
               <form
                 action=""
                 className="flex flex-col space-y-5  pb-4 md:pt-5 pt-20"

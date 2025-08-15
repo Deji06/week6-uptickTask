@@ -105,6 +105,20 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      getAllTasks();
+    } else {
+      setTasks([]);
+      setFilteredTasks([]);
+      setCount(0);
+      setError("Please log in to view tasks");
+      setLoading(false);
+    }
+    // fetchAllTasks()
+  }, []);
+
   const createTask = useCallback(async (content: string) => {
     setLoading(true);
     setCreateTaskError(null);
