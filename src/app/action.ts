@@ -69,7 +69,7 @@ export async function signUp(
     revalidatePath("/LogIn");
     return {
       message: "Sign-up successful!",
-      success: false,
+      success: true,
       errors: {},
       token: token,
     };
