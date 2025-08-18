@@ -1,6 +1,14 @@
 "use client";
 import axios from "axios";
-import React, {  useContext, createContext,type ReactNode, useCallback, useState, useEffect} from "react";
+import React, {
+  useContext,
+  createContext,
+  type ReactNode,
+  useCallback,
+  useState,
+  useEffect,
+} from "react";
+import { getTokenFromCookieStore } from "../action";
 
 interface singleTaskType {
   content: string;
@@ -16,8 +24,8 @@ interface TaskArrayState {
   count: number;
   createTaskError: string | null;
   updateTaskError: string | null;
-  filterState: filterOptions
-  filteredTasks: singleTaskType[]
+  filterState: filterOptions;
+  filteredTasks: singleTaskType[];
 }
 
 interface TaskContextType {
@@ -26,13 +34,12 @@ interface TaskContextType {
   createTask: (content: string) => Promise<boolean>;
   updateTask: (content: string, id: string) => Promise<boolean>;
   deleteTask: (id: string) => Promise<void>;
-  checkTaskBox :(id:string) => Promise<void>
+  checkTaskBox: (id: string) => Promise<void>;
   setFilterState: (filter: filterOptions) => void;
-  resetTaskState: () => void
+  resetTaskState: () => void;
 }
 
-type filterOptions =    'All' | "completed" |"incomplete"
-
+type filterOptions = "All" | "completed" | "incomplete";
 
 export const TaskContext = createContext<TaskContextType | undefined>(
   undefined
@@ -55,7 +62,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     createTaskError,
     updateTaskError,
     filterState,
-    filteredTasks
+    filteredTasks,
   };
 
   const resetTaskState = useCallback(() => {
@@ -74,7 +81,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
     try {
       const url = process.env.NEXT_PUBLIC_TASKMANAGER_URL;
-      const token = localStorage.getItem("authToken");
+      const token = await getTokenFromCookieStore();
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -106,8 +113,8 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
+    const token = getTokenFromCookieStore();
+    if (token === token) {
       getAllTasks();
     } else {
       setTasks([]);
@@ -128,7 +135,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
       return false;
     }
     try {
-      const token = localStorage.getItem("authToken");
+      const token = await getTokenFromCookieStore();
       if (!token) {
         setCreateTaskError("Please log in to create task");
         setLoading(false);
@@ -172,8 +179,8 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const updateTask = useCallback(async (content:string, id:string) => {
-     setLoading(true);
+  const updateTask = useCallback(async (content: string, id: string) => {
+    setLoading(true);
     setUpdateTaskError(null);
     if (content.trim() === "") {
       setUpdateTaskError("task cannot be empty");
@@ -181,14 +188,14 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
       return false;
     }
     try {
-      const token = localStorage.getItem("authToken");
+      const token = await getTokenFromCookieStore();
       if (!token) {
         setUpdateTaskError("token missing, login to update task");
         setLoading(false);
         return false;
       }
 
-      const url = process.env.NEXT_PUBLIC_TASKMANAGER_URL
+      const url = process.env.NEXT_PUBLIC_TASKMANAGER_URL;
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -226,15 +233,14 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-    
   }, []);
 
-  const deleteTask = useCallback(async (id:string) => {
-     setLoading(true);
+  const deleteTask = useCallback(async (id: string) => {
+    setLoading(true);
     setError(null);
     try {
       const URL = process.env.NEXT_PUBLIC_TASKMANAGER_URL;
-      const token = localStorage.getItem("authToken");
+      const token = await getTokenFromCookieStore();
       if (!token) {
         setError("token missing, cannot delete task");
         setLoading(false);
@@ -270,10 +276,9 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-
   }, []);
 
-    const checkTaskBox = useCallback(
+  const checkTaskBox = useCallback(
     async (id: string) => {
       setLoading(true);
       setError(null);
@@ -315,19 +320,19 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
             task._id === id ? { ...task, completed: !task.completed } : task
           )
         );
-          console.error(error);
-      let errorMessage: string;
-      if (error.code === "ERR_NETWORK") {
-        errorMessage =
-          "Failed to connect with server, check internet connection !!";
-      } else if (error.response && error.respnse.status === 404) {
-        errorMessage = "tasks not found";
-      } else if (error.response && error.response.data.msg) {
-        errorMessage = error.response.data.msg;
-      } else {
-        errorMessage = "Failed to filter task";
-      }
-      setError(errorMessage);
+        console.error(error);
+        let errorMessage: string;
+        if (error.code === "ERR_NETWORK") {
+          errorMessage =
+            "Failed to connect with server, check internet connection !!";
+        } else if (error.response && error.respnse.status === 404) {
+          errorMessage = "tasks not found";
+        } else if (error.response && error.response.data.msg) {
+          errorMessage = error.response.data.msg;
+        } else {
+          errorMessage = "Failed to filter task";
+        }
+        setError(errorMessage);
         setError("Failed to update task completion status.");
       } finally {
         setLoading(false);
@@ -350,10 +355,18 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     setFilteredTasks(newFilteredTasks);
   }, [tasks, filterState]);
 
-
   return (
     <TaskContext.Provider
-      value={{ createTask, getAllTasks, updateTask, deleteTask, state, checkTaskBox , resetTaskState, setFilterState}}
+      value={{
+        createTask,
+        getAllTasks,
+        updateTask,
+        deleteTask,
+        state,
+        checkTaskBox,
+        resetTaskState,
+        setFilterState,
+      }}
     >
       {children}
     </TaskContext.Provider>
